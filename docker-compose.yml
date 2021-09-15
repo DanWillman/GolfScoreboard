@@ -4,12 +4,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: Scoreboard/latest
+    image: scoreboard/latest
     container_name: scoreboard
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/Chicago
     ports:
-      - 5001:5001
+      - 5001:80
+      - 5000:443
     restart: unless-stopped

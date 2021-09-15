@@ -1,0 +1,42 @@
+﻿@page "/"
+
+@using Scoreboard.Data
+@inject MongoDataAccess Mongo
+
+<h1>Mini Shame Golf Scores</h1>
+
+<p>Super basic scoreboard for now</p>
+
+@if (participants == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Golfer</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in participants)
+            {
+                <tr>
+                    <td>@user.DisplayName</td>
+                    <td>@user.Score</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Participant> participants;
+
+    protected override async Task OnInitializedAsync()
+    {
+        participants = Mongo.GetParticipants().OrderBy(p => p.Score).ToList();
+    }
+}

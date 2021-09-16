@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Scoreboard.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,11 +8,13 @@ namespace Scoreboard.Data
     public class MongoDataAccess
     {
         private readonly string ParticipantCollectionName = "scores";
+        private readonly string ArchiveCollectionName = "archive";
         private readonly string ConnectionString = "mongodb://192.168.1.69:27018";
         private readonly string DatabaseName = "shame_golf";
         private const ulong DANA_SERVER_ID = 854088068306829332;
 
         private readonly IMongoCollection<Participant> particpantCollection;
+        private readonly IMongoCollection<Archive> archiveCollection;
 
         public MongoDataAccess()
         {
@@ -20,11 +23,29 @@ namespace Scoreboard.Data
 
             particpantCollection = database.GetCollection<Participant>(ParticipantCollectionName);
             particpantCollection.Indexes.CreateOne(new CreateIndexModel<Participant>(Builders<Participant>.IndexKeys.Ascending(x => x.DisplayName)));
+
+            archiveCollection = database.GetCollection<Archive>(ArchiveCollectionName);
+            archiveCollection.Indexes.CreateOne(new CreateIndexModel<Archive>(Builders<Archive>.IndexKeys.Ascending(x => x.Id)));
         }
 
         /// <summary>
-        /// Returns an unsorted list of all particpant entries for a specified server
+        /// Returns an unsorted list of all particpant entries for the current season
         /// </summary>
-        public List<Participant> GetParticipants() => particpantCollection.Find(x => x.ServerId == DANA_SERVER_ID).ToList();    
+        public List<Participant> GetParticipants() => particpantCollection.Find(x => x.ServerId == DANA_SERVER_ID).ToList();
+
+        /// <summary>
+        /// Gets all archives from the specified server
+        /// </summary>
+        public List<Archive> GetArchives() => archiveCollection.Find(x => x.ServerId == DANA_SERVER_ID).ToList();
+
+        /// <summary>
+        /// Returns an unsorted list of all particpant entries for a specified season
+        /// </summary>
+        /// <returns></returns>
+        public Archive GetArchive(string archiveId)
+        {
+            return archiveCollection.Find(a => a.Id == archiveId).FirstOrDefault();
+        }
+
     }
 }

@@ -1,11 +1,10 @@
-﻿@page "/"
+﻿@page "/archive/{id}"
 
 @using Scoreboard.Data
 @using Scoreboard.Data.Models
 @inject MongoDataAccess Mongo
 
-<h1>Mini Shame Golf Scores</h1>
-
+<h1>@SeasonArchive.ArchiveName Scores</h1>
 <p>Super basic scoreboard for now</p>
 
 @if (participants == null)
@@ -34,10 +33,16 @@ else
 }
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Archive SeasonArchive { get; set; }
+
     private List<Participant> participants;
 
     protected override async Task OnInitializedAsync()
     {
-        participants = Mongo.GetParticipants().OrderBy(p => p.Score).ToList();
+        SeasonArchive = Mongo.GetArchive(Id);
+        participants = SeasonArchive.Participant;
     }
 }

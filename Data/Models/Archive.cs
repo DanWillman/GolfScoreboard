@@ -1,12 +1,13 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
-namespace Scoreboard.Data
+namespace Scoreboard.Data.Models
 {
     /// <summary>
-    /// Model holding data around participants records
+    /// Model holds an archive entry for a golf season. 1 Entry per particpant, per season
     /// </summary>
-    public class Participant
+    public class Archive
     {
         /// <summary>
         /// Mongo unique ID for entry
@@ -16,9 +17,9 @@ namespace Scoreboard.Data
         public string Id { get; set; }
 
         /// <summary>
-        /// Display name of golfer
+        /// Archived name, used to group entries for seasons
         /// </summary>
-        public string DisplayName { get; set; }
+        public string ArchiveName { get; set; }
 
         /// <summary>
         /// DiscordGuild id record is part of
@@ -26,9 +27,9 @@ namespace Scoreboard.Data
         public ulong ServerId { get; set; }
 
         /// <summary>
-        /// Current score
+        /// Entry for the season archive as of time of archival
         /// </summary>
-        public int Score { get; set; }
+        public List<Participant> Participant { get; set; }
 
         [BsonExtraElements]
         private BsonDocument CatchAll { get; set; }

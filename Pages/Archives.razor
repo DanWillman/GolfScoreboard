@@ -43,6 +43,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         SeasonArchive = Mongo.GetArchive(Id);
-        participants = SeasonArchive.Participant;
+        participants = SeasonArchive.Participant.OrderBy(p => p.Score).ToList();
     }
 }

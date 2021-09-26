@@ -29,7 +29,8 @@ namespace Scoreboard.Data.Models
         /// <summary>
         /// Entry for the season archive as of time of archival
         /// </summary>
-        public List<Participant> Participant { get; set; }
+        [BsonElement("Participant")]
+        public List<Participant> Participants { get; set; }
 
         [BsonExtraElements]
         private BsonDocument CatchAll { get; set; }

@@ -1,0 +1,57 @@
+﻿@page "/history/{id}"
+
+@using Scoreboard.Data
+@using Scoreboard.Data.Models
+@inject MongoDataAccess Mongo
+@inject TimeZoneService timeZoneService 
+
+<h1>@Participant.DisplayName's History</h1>
+
+@if (Events == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Change</th>
+                <th>Notes</th>
+                <th>Date/Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var evt in Events)
+            {
+            <tr>
+                <td>@evt.ScoreModifier</td>
+                <td>@evt.Notes</td>
+                <td>@evt.EventTimeLocal.ToString("T")</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private ulong userId { get; set; }
+
+    private List<Event> Events;
+    private Participant Participant;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userId = ulong.Parse(Id);
+        Events = Mongo.GetActiveHistory(userId).OrderByDescending(e => e.EventTimeUTC).ToList();
+        Participant = Mongo.GetParticipant(userId);
+
+        foreach (var evt in Events)
+        {
+            evt.EventTimeLocal = await timeZoneService.GetLocalDateTime(evt.EventTimeUTC);
+        }
+    }
+}

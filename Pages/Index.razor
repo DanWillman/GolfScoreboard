@@ -25,7 +25,9 @@ else
             @foreach (var user in participants)
             {
                 <tr>
-                    <td>@user.DisplayName</td>
+                    <td>
+                        <a href="@($"history/{user.UserId}")">@user.DisplayName</a>
+                    </td>
                     <td>@user.Score</td>
                 </tr>
             }

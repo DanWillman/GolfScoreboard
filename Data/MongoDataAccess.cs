@@ -31,7 +31,8 @@ namespace Scoreboard.Data
         /// <summary>
         /// Returns an unsorted list of all particpant entries for the current season
         /// </summary>
-        public List<Participant> GetParticipants() => particpantCollection.Find(x => x.ServerId == DANA_SERVER_ID).ToList();
+        public List<Participant> GetParticipants() => particpantCollection.Find(p => p.ServerId == DANA_SERVER_ID).ToList();
+
         /// <summary>
         /// Returns a specific participant
         /// </summary>

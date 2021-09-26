@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Scoreboard.Data;
+using Scoreboard.Services;
 
 namespace Scoreboard
 {
@@ -24,6 +25,7 @@ namespace Scoreboard
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<MongoDataAccess>();
+            services.AddScoped<TimeZoneService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

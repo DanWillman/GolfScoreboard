@@ -1,4 +1,4 @@
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using Scoreboard.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +57,11 @@ namespace Scoreboard.Data
         /// </summary>
         public List<Event> GetActiveHistory(ulong userId) => GetParticipants().Find(p => p.UserId == userId).EventHistory;
 
-        public List<Event> GetArchiveHistory(ulong userId, string archiveId) => GetArchive(archiveId).Participants.Find(p => p.UserId == userId).EventHistory;
+        public List<Event> GetArchiveHistory(ulong userId, string archiveId)
+        {
+            var results = GetArchive(archiveId).Participants.Find(p => p.UserId == userId).EventHistory;
+
+            return results == null ? new List<Event>() : results;
+        }
     }
 }

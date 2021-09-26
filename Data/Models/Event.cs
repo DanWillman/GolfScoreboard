@@ -22,6 +22,11 @@ namespace Scoreboard.Data.Models
         public DateTime EventTimeUTC { get; set; }
 
         /// <summary>
+        /// Converted timestamp for user local time
+        /// </summary>
+        public DateTimeOffset EventTimeLocal { get; set; }
+
+        /// <summary>
         /// User current score after modification completed
         /// </summary>
         public int ScoreSnapshot { get; set; }
@@ -35,5 +40,13 @@ namespace Scoreboard.Data.Models
         /// Users score prior to event triggering
         /// </summary>
         public int PriorScore { get; set; }
+
+        /// <summary>
+        /// User provided notes for change
+        /// </summary>
+        public string Notes { get; set; }
+
+        [BsonExtraElements]
+        private BsonDocument CatchAll { get; set; }
     }
 }

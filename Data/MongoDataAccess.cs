@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using Scoreboard.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +32,10 @@ namespace Scoreboard.Data
         /// Returns an unsorted list of all particpant entries for the current season
         /// </summary>
         public List<Participant> GetParticipants() => particpantCollection.Find(x => x.ServerId == DANA_SERVER_ID).ToList();
+        /// <summary>
+        /// Returns a specific participant
+        /// </summary>
+        public Participant GetParticipant(ulong userId) => GetParticipants().Find(p => p.UserId == userId);
 
         /// <summary>
         /// Gets all archives from the specified server
@@ -47,5 +51,11 @@ namespace Scoreboard.Data
             return archiveCollection.Find(a => a.Id == archiveId).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets all history events for user in current season
+        /// </summary>
+        public List<Event> GetActiveHistory(ulong userId) => GetParticipants().Find(p => p.UserId == userId).EventHistory;
+
+        public List<Event> GetArchiveHistory(ulong userId, string archiveId) => GetArchive(archiveId).Participants.Find(p => p.UserId == userId).EventHistory;
     }
 }

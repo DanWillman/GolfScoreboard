@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace Scoreboard.Data.Models
 {
@@ -26,9 +27,19 @@ namespace Scoreboard.Data.Models
         public ulong ServerId { get; set; }
 
         /// <summary>
+        /// DiscordUser id of record
+        /// </summary>
+        public ulong UserId { get; set; }
+
+        /// <summary>
         /// Current score
         /// </summary>
         public int Score { get; set; }
+
+        /// <summary>
+        /// List of events creating user score
+        /// </summary>
+        public List<Event> EventHistory { get; set; }
 
         [BsonExtraElements]
         private BsonDocument CatchAll { get; set; }

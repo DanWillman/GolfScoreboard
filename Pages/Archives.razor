@@ -1,4 +1,4 @@
-﻿@page "/archive/{id}"
+@page "/archive/{id}"
 
 @using Scoreboard.Data
 @using Scoreboard.Data.Models
@@ -24,7 +24,9 @@ else
             @foreach (var user in participants)
             {
                 <tr>
-                    <td>@user.DisplayName</td>
+                    <td>
+                        <a href="@($"/archive/{Id}/history/{user.UserId}")">@user.DisplayName</a>
+                    </td>
                     <td>@user.Score</td>
                 </tr>
             }
@@ -43,6 +45,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         SeasonArchive = Mongo.GetArchive(Id);
-        participants = SeasonArchive.Participant.OrderBy(p => p.Score).ToList();
+        participants = SeasonArchive.Participants.OrderBy(p => p.Score).ToList();
     }
 }
